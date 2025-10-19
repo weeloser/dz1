@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Максим Матлаков - Домашнее задание</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .chess-bg {
+            background-image:
+                linear-gradient(45deg, rgba(230, 230, 230, 0.6) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(230, 230, 230, 0.6) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(230, 230, 230, 0.6) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(230, 230, 230, 0.6) 75%);
+            background-size: 40px 40px;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link:hover {
+            color: #ef4444;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ef4444;
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible, .staggered-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .card:hover .animated-img {
+            transform: scale(1.03);
+        }
+        .animated-img {
+            transition: transform 0.4s ease-in-out;
+        }
+        .btn-link {
+            transition: all 0.3s ease;
+        }
+        .btn-link:hover {
+             transform: scale(1.05);
+             box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .title-char {
+            display: inline-block;
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+        }
+        .staggered-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .staggered-list.visible .staggered-item:nth-child(1) { transition-delay: 100ms; }
+        .staggered-list.visible .staggered-item:nth-child(2) { transition-delay: 200ms; }
+        .staggered-list.visible .staggered-item:nth-child(3) { transition-delay: 300ms; }
+        .staggered-list.visible .staggered-item:nth-child(4) { transition-delay: 400ms; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-800 transition-transform duration-300 hover:scale-105">
+                <span class="text-blue-600">Maxim</span><span class="text-red-600">Matlakov</span>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#info" class="nav-link font-semibold">Информация</a>
+                <a href="#rating" class="nav-link font-semibold">Рейтинг</a>
+                <a href="#tasks" class="nav-link font-semibold">Задачи</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2">
+            <a href="#info" class="block nav-link font-semibold w-min">Информация</a>
+            <a href="#rating" class="block nav-link font-semibold w-min">Рейтинг</a>
+            <a href="#tasks" class="block nav-link font-semibold w-min">Задачи</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="info" class="fade-in mb-20">
+            <div class="flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden card">
+                <div class="md:w-1/3">
+                    <img src="https://i.postimg.cc/SxGz5VvY/image.png" alt="Максим Матлаков" class="w-full h-full object-cover">
+                </div>
+                <div class="md:w-2/3 p-8 md:p-12">
+                    <h1 class="animated-title text-4xl md:text-5xl font-bold mb-4">Максим Матлаков</h1>
+                    <p class="text-xl text-gray-600 mb-6">Гроссмейстер</p>
+                    <div class="border-l-4 border-blue-500 pl-4 mb-6">
+                        <h2 class="text-2xl font-semibold mb-3">Достижения:</h2>
+                        <ul class="list-none space-y-2 text-gray-700 staggered-list">
+                            <li class="staggered-item"><span class="text-red-500 mr-2">◆</span>Чемпион Санкт-Петербурга</li>
+                            <li class="staggered-item"><span class="text-red-500 mr-2">◆</span>Чемпион Европы</li>
+                            <li class="staggered-item"><span class="text-red-500 mr-2">◆</span>Бронзовый призёр Суперфинала чемпионата России</li>
+                            <li class="staggered-item"><span class="text-red-500 mr-2">◆</span>Бронзовый призёр чемпионата России по рапиду</li>
+                        </ul>
+                    </div>
+                    <p class="text-gray-600"><span class="font-semibold">Дата и место рождения:</span> 5 марта 1991 г., Санкт-Петербург.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="rating" class="fade-in mb-20">
+            <h2 class="text-3xl font-bold text-center mb-10">Максимальный рейтинг</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card chess-bg">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-blue-700">ФШР</h3>
+                    <div class="space-y-3 text-lg">
+                        <p><strong>Блиц:</strong> <span class="font-semibold text-red-600">2760</span></p>
+                        <p><strong>Рапид:</strong> <span class="font-semibold text-red-600">2732</span></p>
+                        <p><strong>Классика:</strong> <span class="font-semibold text-red-600">2739</span></p>
+                    </div>
+                    <div class="mt-6 rounded-lg shadow-md overflow-hidden">
+                       <img src="https://i.postimg.cc/15kg42Lz/image.png" alt="График рейтинга ФШР" class="w-full animated-img">
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg card chess-bg">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-blue-700">ФИДЕ</h3>
+                     <div class="space-y-3 text-lg">
+                        <p><strong>Standard:</strong> <span class="font-semibold text-red-600">2606</span></p>
+                        <p><strong>Rapid:</strong> <span class="font-semibold text-red-600">2634</span></p>
+                        <p><strong>Blitz:</strong> <span class="font-semibold text-red-600">2604</span></p>
+                    </div>
+                    <div class="mt-6 bg-white p-2 rounded-lg shadow-md overflow-hidden">
+                        <img src="https://i.postimg.cc/sxnptmXv/image.png" alt="График рейтинга ФИДЕ" class="w-full rounded-md animated-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tasks" class="fade-in">
+            <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg card">
+                <h2 class="text-3xl font-bold text-center mb-8">Задачи и их выполнение</h2>
+                <div class="mb-10 p-6 border-2 border-dashed border-gray-300 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700">Поставленные задачи:</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>Найти партии из Сочи (Блиц, Рапид) за белый цвет.</li>
+                        <li>Понять, почему именно я выполняю данное домашнее задание.</li>
+                        <li>Понять, почему именно он и для чего?</li>
+                    </ol>
+                </div>
+                
+                <div class="space-y-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">1. Найденные партии</h3>
+                        <p class="mb-6 text-gray-600">Ссылки на Lichess-студии с партиями и на страницы турниров.</p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <a href="https://lichess.org/study/GPdJlnUD" target="_blank" class="block text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md btn-link">Lichess Студия (Блиц)</a>
+                            <a href="https://lichess.org/study/k7EbVRmP" target="_blank" class="block text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md btn-link">Lichess Студия (Рапид)</a>
+                            <a href="https://chessopen.ru/live/chempionat-rossii-2025-goda-sredi-muzhskikh-komand-po-blitsu/?rid=140682" target="_blank" class="block text-center bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md btn-link">Турнир (Блиц)</a>
+                            <a href="https://chessopen.ru/live/chempionat-rossii-2025-goda-sredi-muzhchin-po-bystrym-shakhmatam.-/?rid=140459" target="_blank" class="block text-center bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md btn-link">Турнир (Рапид)</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">2. Почему я выполняю это задание?</h3>
+                        <div class="bg-gray-100 p-6 rounded-lg">
+                            <p class="text-gray-800 leading-relaxed">Данный вопрос связан с задачей 3. Краткий ответ - я часто играю <strong>1. b3</strong>, а в условной первой партии за белых в блиц у Максима было:</p>
+                            <code class="block bg-gray-800 text-white p-4 rounded-md my-4 text-sm whitespace-pre">1. Nf3 Nf6<br>2. b3</code>
+                            <p class="text-gray-800">Думаю тут взаимосвязь.</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">3. Почему именно он и для чего?</h3>
+                         <div class="bg-gray-100 p-6 rounded-lg">
+                            <p class="text-gray-800 leading-relaxed">Этот вопрос связан с задачей 2, вот ответы, которые мне кажутся верными:</p>
+                             <ul class="list-none mt-4 space-y-3">
+                                 <li class="flex items-start"><span class="text-blue-500 font-bold mr-3 text-lg">▶</span><div><strong class="text-blue-700">Почему именно он?</strong> - Он играл данный вариант часто.</div></li>
+                                 <li class="flex items-start"><span class="text-red-500 font-bold mr-3 text-lg">▶</span><div><strong class="text-red-700">Для чего?</strong> - Просмотреть и изучить, а может и даже играть.</div></li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-20">
+        <div class="container mx-auto px-6 py-6 text-center text-gray-500">
+            
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const title = document.querySelector('.animated-title');
+            if (title && title.textContent) {
+                const text = title.textContent;
+                title.innerHTML = '';
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.className = 'title-char';
+                    span.style.animationDelay = `${index * 0.03}s`;
+                    title.appendChild(span);
+                });
+            }
+        });
+
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const faders = document.querySelectorAll('.fade-in, .staggered-list');
+        const appearOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('visible');
+                    if (entry.target.classList.contains('staggered-list')) {
+                        const items = entry.target.querySelectorAll('.staggered-item');
+                        items.forEach(item => item.classList.add('visible'));
+                    }
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+</body>
+</html>
+
